@@ -240,6 +240,10 @@
   <div class="message">Feel the Spirit in every note</div>
   <div class="message">Worship in sound and truth</div>
 </div>
+
+   
+
+    
     
     <nav class="nav-bar">
       <a href="#" class="active"onclick="showPage('home', event)">Home</a>
@@ -468,7 +472,7 @@ function changeTheme_s(themeClass) {
 
   <section id="home" class="content active" style="padding: 15px; margin: 0px;">
     <h2 style="font-weight: bold; font-family: Georgia, serif; padding: 6px;">Welcome to David Mpiga Piano</h2>
- <p style="padding: 2px 0px 10px 0px; font-weight: bold; font-family: Georgia, serif; font-size: 14px;">A platform dedicated to inspiring piano music, worship melodies, and skillful keyboard artistry.</p>
+ <p style="margin:0px; padding: 2px 0px 30px 0px; font-weight: bold; font-family: Georgia, serif; font-size: 13px;">A platform dedicated to inspiring piano music, worship melodies, and skillful keyboard artistry.</p>
 
 
 
@@ -525,7 +529,7 @@ function changeTheme_s(themeClass) {
     </div>
     <div class="slider-itemk">
       <h3>Keyboards Played</h3>
-      Yamaha PSR-E363, E373, E463 <br>currently using PSR-E273
+      Yamaha PSR-E363, E373, E463, E473 <br>currently using PSR-E273
     </div>
     <div class="slider-itemk">
       <h3>Favorite Hymn</h3>
@@ -559,16 +563,247 @@ function changeTheme_s(themeClass) {
 
 
 
- <h3>Explore more contents here</h3>
+ <h3 style="margin:30px 10px 10px;">Explore Our Latest Updates</h3>
  
  <div class="card-container" style="background:">
  <div class="card" style=". ">
    <h4>This Week</h4><hr style="margin: 1px 0;"> <p style="color: black;">New piano cover releases every week.<br>
-    Discover powerful piano worship sessions and special gospel arrangements recorded just 4U. </p><a href="see more">Check Now</a>
-   </div>
+    Discover powerful piano worship sessions and special gospel arrangements recorded just 4U. </p>
+<a onclick="document.getElementById('weekUpdates').style.display='block'">
+ This Week
+</a></div>
+
+
+
+<style>
+  #weekUpdates {
+    display: none;
+    position: fixed;
+    top: 100px;
+    left: 20px;
+    width: 90%;
+    max-width: 700px;
+    height: 200px;
+    background: transparent;
+    z-index: 9999;
+    box-sizing: border-box;
+    border-radius: 10px;
+    /* Remove overflow: hidden to allow part of the button outside to be visible */
+    /* overflow: hidden; */ 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+
+  #weekUpdates iframe {
+    width: 100%;
+    height: 100%;
+    transform-origin: top left;
+    border: none;
+    border-radius: 10px;
+  }
+
+  /* Header styling to hold drag button */
+  #popupHeader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.1);
+    cursor: move;
+    border-radius: 10px 10px 0 0;
+  }
+
+  /* Drag button styling */
+  #d {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: grab;
+  }
+
+  /* Circular close button positioned on border, visible outside popup */
+  #closeCircle {
+    position: absolute;
+    top: -15px; /* Slightly outside top border */
+    right: -15px; /* Slightly outside right border */
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000; /* Above all */
+    transition: background-color 0.2s;
+  }
+
+  #closeCircle:hover {
+    background-color: #eee;
+  }
+
+  /* Resizer corner styling */
+  #r {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    cursor: se-resize;
+    border-top: 2px solid #999;
+    border-left: 2px solid #999;
+    box-shadow: inset -1px -1px 2px rgba(0,0,0,0.2);
+    border-radius: 0 0 0 10px;
+    background: transparent;
+  }
+</style>
+
+<!-- Trigger Button -->
+
+
+<!-- Popup Player -->
+<div id="weekUpdates">
+  <!-- Header with drag button -->
+  <div id="popupHeader">
+    <!-- Drag Button with id 'd' -->
+    <button id="d" title="Drag" aria-label="Drag">🔘</button>
+  </div>
+  
+  <!-- Circular close button positioned outside the border -->
+  <button id="closeCircle" title="Close" aria-label="Close">❌</button>
+  
+  <!-- Resize corner with id 'r' -->
+  <div id="r"></div>
+  
+  <!-- Iframe -->
+  <iframe src="https://audiomack.com/embed/davidmpigapiano/playlist/this-week-updates" scrolling="no" title="This Week Updates"></iframe>
+</div>
+
+<script>
+  // Drag functionality for element with id 'd'
+  const popup = document.getElementById('weekUpdates');
+  const dragBtn = document.getElementById('d');
+  let isDragging = false;
+  let offsetX = 0;
+  let offsetY = 0;
+
+  dragBtn.addEventListener('mousedown', startDrag);
+  dragBtn.addEventListener('touchstart', startDrag);
+
+  function startDrag(e) {
+    e.preventDefault();
+    isDragging = true;
+    if (e.type === 'touchstart') {
+      offsetX = e.touches[0].clientX - popup.offsetLeft;
+      offsetY = e.touches[0].clientY - popup.offsetTop;
+    } else {
+      offsetX = e.clientX - popup.offsetLeft;
+      offsetY = e.clientY - popup.offsetTop;
+    }
+    document.addEventListener('mousemove', doDrag);
+    document.addEventListener('mouseup', stopDrag);
+    document.addEventListener('touchmove', doDrag);
+    document.addEventListener('touchend', stopDrag);
+  }
+
+  function doDrag(e) {
+    if (!isDragging) return;
+    let clientX, clientY;
+    if (e.touches) {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+    // Calculate new position
+    let left = clientX - offsetX;
+    let top = clientY - offsetY;
+
+    // Limit within window
+    const maxLeft = window.innerWidth - popup.offsetWidth;
+    const maxTop = window.innerHeight - popup.offsetHeight;
+    left = Math.max(0, Math.min(left, maxLeft));
+    top = Math.max(0, Math.min(top, maxTop));
+
+    popup.style.left = left + 'px';
+    popup.style.top = top + 'px';
+  }
+
+  function stopDrag() {
+    isDragging = false;
+    document.removeEventListener('mousemove', doDrag);
+    document.removeEventListener('mouseup', stopDrag);
+    document.removeEventListener('touchmove', doDrag);
+    document.removeEventListener('touchend', stopDrag);
+  }
+
+  // Close button functionality
+  document.getElementById('closeCircle').addEventListener('click', () => {
+    document.getElementById('weekUpdates').style.display='none';
+  });
+
+  // Resizing for element with id 'r'
+  const resizer = document.getElementById('r');
+  let isResizing = false;
+
+  resizer.addEventListener('mousedown', startResize);
+  resizer.addEventListener('touchstart', startResize);
+
+  function startResize(e) {
+    e.preventDefault();
+    isResizing = true;
+    document.addEventListener('mousemove', resize);
+    document.addEventListener('mouseup', stopResize);
+    document.addEventListener('touchmove', resize);
+    document.addEventListener('touchend', stopResize);
+  }
+
+  function resize(e) {
+    if (!isResizing) return;
+    let clientX, clientY;
+    if (e.touches) {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+    const popup = document.getElementById('weekUpdates');
+    const rect = popup.getBoundingClientRect();
+
+    const newWidth = Math.max(150, clientX - rect.left);
+    const newHeight = Math.max(100, clientY - rect.top);
+
+    const maxWidth = window.innerWidth - rect.left - 10;
+    const maxHeight = window.innerHeight - rect.top - 10;
+
+    popup.style.width = Math.min(newWidth, maxWidth) + 'px';
+    popup.style.height = Math.min(newHeight, maxHeight) + 'px';
+  }
+
+  function stopResize() {
+    isResizing = false;
+    document.removeEventListener('mousemove', resize);
+    document.removeEventListener('mouseup', stopResize);
+    document.removeEventListener('touchmove', resize);
+    document.removeEventListener('touchend', stopResize);
+  }
+</script>
+
+
+
+   
 
   <div class="card" style="">
-<h4>Media Library</h4><hr style="margin: 1px 0;"> <p style="color: black;">A collection of Spirit-filled music and videos to inspire worship and draw hearts closer to God. Explore more of our contents from the Media Page</p><a href="see more">Visit Now</a>
+<h4>Media Library</h4><hr style="margin: 1px 0;"> <p style="color: black;">A collection of Spirit-filled music and videos to inspire worship and draw hearts closer to God. Explore more of our contents from the Media Page</p><a href="#media" onclick="showPage('media', event)">Visit Now</a>
   </div>
  </div>
 </div><br>
@@ -582,9 +817,10 @@ function changeTheme_s(themeClass) {
     ✓ Spirit and Truth<br>
     ✓ Global Reach<br>
     ✓ Technology for the Kingdom
-     <div style=" color: black; padding-top:0px; font-weight:bold; line-height:20px; font-size:14px; text-align:left; margin-left:5px; padding-bottom:6px;">Let's collaborate in partnership</div>
-    <a href="see more">Partner With Us</a>
+     <div style=" color: black; padding-top:0px; font-weight:bold; line-height:20px; font-size:14px; text-align:left; margin-left:5px; padding-bottom:6px;">Join this Ministry movement</div>
+    <a href="https://whatsapp.com/channel/0029VbB3RbzAjPXR327wyb3C" class="social-btn" style ="color: white; background-color: green; font-family: 'Roboto', sans-serif; font-weight: bold; border:none; padding:3px 15px; border-radius:5px; font-weight:bold; font-size: 14px;">Join Now</a> 
    </div>
+
 
 
 <div class="card" style=";">
@@ -595,42 +831,85 @@ function changeTheme_s(themeClass) {
 </div>
 
 
+  <style>
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 9998;
+    }
+
+    #aboutName {
+      display: none;
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(248, 248, 255, 0.95);
+      padding: 20px;
+      max-width: 700px;
+      width: 75%;
+      max-height: 65vh;
+      overflow-y: auto;
+      border-radius: 8px;
+      z-index: 9999;
+      font-family: Georgia, serif;
+      line-height: 1.6;
+      color: #333;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    .circular-profile {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid #ccc;
+      margin: 10px auto;
+    }
+
+    .circular-profile img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.0);
+    }
+
+    .close-btn-ak {
+      margin-top: 15px;
+      padding: 8px 16px;
+      background-color: #2c3e50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: Georgia, serif;
+    }
+  </style>
+
+
+
 <!-- Overlay -->
-<div id="overlay" style="display:none; position:fixed; 
-top:0; 
-left:0; 
-width:100%; 
-height:100%;
-background-color:rgba(0, 0, 0, 0.7); 
-z-index: 9998;"></div>
+<div id="overlay"></div>
 
 <!-- Popup Modal -->
-<div id="aboutName" style="display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color:rgba(248, 248, 255, 0.9); 
-  padding: 20px;
-  max-width: 700px;
-  width: 75%;
-  max-height: 65vh;
-  overflow-y: auto;
-  border-radius: 8px;
-  z-index: 9999;
-  font-family: Georgia, serif;
-  line-height: 1.6;
-  color: #333;">
+<div id="aboutName">
+  <h3 style="color:#2c3e50; text-align: center; font-size:16px;">About the Name "Mpiga Piano"</h3>
 
-  <h3 style="color:#2c3e50;">About the Name "Mpiga Piano"</h3>
+  <div class="circular-profile">
+    <img src="https://i.postimg.cc/tT0xvJjb/IMG-20250821-212936.jpg" alt="Profile Picture">
+  </div>
+
   <p>My real name is <strong>Okello David Alfred</strong>, but many know me as <strong>David Mpiga Piano</strong>.</p>
-  <p>The name "Mpiga Piano" was given to me during a powerful convention in Kiryandongo-Bweyale. I played the piano under the anointing until the Holy Ghost came down — people danced, shouted, and the atmosphere was filled with the presence of God.</p>
-  <p>In that region, where Swahili is commonly spoken, the crowd began to pray and cry out, calling on <b>"Mungu Mbariki Mpiga Piano"</b> which means <b>"God Bless Piano Player"</b> in Swahili.</p>
-  <p>Since that day, the name stuck, and till today, I’m widely known and honored as <b>Mpiga Piano</b>, a name that carries the story of worship and the sound of revival.</p>
-<button onclick="toggleAboutName()" style="margin-top:10px;">Close</button>
+  <p>The name "Mpiga Piano" was first called during a powerful convention in Kiryandongo-Bweyale at <b>Kijune End-Time Message my home church.</b> The Holy Spirit descended in such a mighty way—people danced, shouted, and the atmosphere was filled with the presence of God.</p>
+  <p>In that region, where Swahili is commonly spoken, the crowd began to pray for one another. That day, I was called "Mpiga Piano" meaning "Piano Player." It was blessed in the name of the Lord by the congregation saying, <b>"Mungu Mbariki Mpiga Piano yetu"</b> which means <b>"God Bless our Piano Player"</b> in Swahili.</p>
+ <p>Since that day, the name stuck, and till today, I’m widely known and honored as <b>Mpiga Piano</b>, a name that carries the story of worship and the sound of revival.</p>
+
+  <button class="close-btn-ak" onclick="toggleAboutName()">Close</button>
 </div>
 
-<!-- Script -->
 <script>
   function toggleAboutName() {
     const popup = document.getElementById('aboutName');
@@ -640,13 +919,74 @@ z-index: 9998;"></div>
     popup.style.display = isVisible ? "none" : "block";
     overlay.style.display = isVisible ? "none" : "block";
   }
+  
+  function toggleAboutName() {
+    const popup = document.getElementById('aboutName');
+    const overlay = document.getElementById('overlay');
+    const isVisible = popup.style.display === "block";
+
+    if (!isVisible) {
+      popup.style.display = "block";
+      overlay.style.display = "block";
+      popup.scrollTop = 0; // Reset scroll position to top
+    } else {
+      popup.style.display = "none";
+      overlay.style.display = "none";
+    }
+  }
 </script>
+
+
 </div><br>
 
 
  <div class="container-3" style="background-color: black; background: rgba(0 0 0 / 0.2); padding: 10px; border-radius: 8px;">
-     <h3>Scripture of the Day</h3>
-  <p><sup><b>“</b></sup><big><big><b>L</b></big></big><b>et everything that has breath praise the Lord.</b>” - Psalm 150:6</p> </div> 
+     <h3>Scriptures of the Day</h3>
+     
+     
+  <style>
+  .verse-slider-e {
+    max-width: 600px;
+    margin: 5px auto;
+    padding: 0px;
+    border-radius: 8px;
+    font-family: Georgia, serif;
+    text-align: center;
+    font-size: 12px;
+    color: white;
+    min-height: 80px;
+  }
+</style>
+
+<div class="verse-slider-e" id="verseSliderE">
+  Loading verses...
+</div>
+
+<script>
+  const versesE = [
+    `"God is a Spirit: and they that worship him must worship him in spirit and in truth." — John 4:24`,
+    `"Make a joyful noise unto the Lord, all ye lands. Serve the Lord with gladness: come before his presence with singing." — Psalm 100:1-2`,
+    `"Let the word of Christ dwell in you richly... singing with grace in your hearts to the Lord." — Colossians 3:16`,
+    `"Let every thing that hath breath praise the Lord. Praise ye the Lord." — Psalm 150:6`,
+    `"Sing unto the Lord; for he hath done excellent things: this is known in all the earth." — Isaiah 12:5`,
+    `"Speaking to yourselves in psalms and hymns and spiritual songs, singing and making melody in your heart to the Lord." — Ephesians 5:19`,
+ `"I will sing unto the Lord as long as I live: I will sing praise to my God while I have my being." — Psalm 104:33`,
+    `"The Lord is my strength and my song, and is become my salvation." — Psalm 118:14`,
+    `"O come, let us sing unto the Lord: let us make a joyful noise to the rock of our salvation." — Psalm 95:1-2`,
+    `"The Lord thy God in the midst of thee is mighty... he will joy over thee with singing." — Zephaniah 3:17`
+  ];
+
+  let indexE = 0;
+  const sliderE = document.getElementById('verseSliderE');
+
+  function showNextVerseE() {
+    sliderE.innerHTML = versesE[indexE];
+    indexE = (indexE + 1) % versesE.length;
+  }
+
+  showNextVerseE(); // Show first verse
+  setInterval(showNextVerseE, 7000); // Change every 6 seconds
+</script> </div>
   
    </div></section><br>
       
@@ -660,8 +1000,6 @@ z-index: 9998;"></div>
 
      <h1 style="font-size: 18px; color: brown; background:silver; padding:5px; border-radius: 10px; text-align: center; margin: 0px 30px 20px;">OUR FORCUS IS ON:</h1>
      
-     
-   
    <div style="margin:17px;">  <div class="container-4" style="background-color: black; background: rgba(0 0 0 / 0.2); padding: 10px; border-radius: 0px 50px;  font-size: 14px; width: 300px; height: 190px; border: solid 2px #333; border-radius: 0px 50px; margin-right: 8px;">
      <h3 style="margin-top:0px;">1. Music as Ministry</h3>
   <p><big><big><b>E</b></big></big>very note played is a prayer. Every recording is prepared with a heart of intercession and worship. We don’t just produce music—we minister healing, hope, and deliverance through inspired melodies.</p> </div> <br>
@@ -690,6 +1028,45 @@ z-index: 9998;"></div>
 
 
 
+<!-- Popup Container -->
+<div id="popupMessage" style="display:none; position:fixed; top:250px; right:20px; background:#f9f9f9; padding:8px; box-shadow:0 2px 10px rgba(0,0,0,0.2); border-radius:8px; z-index:9999; max-width:260px; font-family:Georgia,serif; font-size:14px; text-align: center; border: solid 1px blue;">
+  <div style="text-align:right;">
+    <button onclick="hidePopup()" style="background:none; border:none; font-size:20px; font-weight:bold; cursor:pointer;">×</button>
+  </div><h2 style="margin-top:0px; padding-top:0px;">David Mpiga Piano</h2>
+  <p style="text-align:left; line-height:20px; margin-top: 0px; padding-left:20px; font-size:15px;"> 🎧 Enjoying this? For a better experience, try it directly from the app!</p>
+  <a href="https://www.appcreator24.com/app3719392-xr394w" target="_blank" style="display:inline-block; margin-top:10px; background:#4CAF50; color:#fff; padding:8px 12px; border-radius:5px; text-decoration:none;">⬇ Download App</a>
+</div>
+
+<script>
+  function showPopup() {
+    document.getElementById('popupMessage').style.display = 'block';
+  }
+
+  function hidePopup() {
+    document.getElementById('popupMessage').style.display = 'none';
+  }
+
+  // First popup after 90 seconds 
+  setTimeout(showPopup, 90000);
+
+  // Show again every 10 minutes
+  setInterval(showPopup, 600000);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -697,170 +1074,354 @@ z-index: 9998;"></div>
     <h2 style="font-weight: bold; font-family: Georgia, serif; padding: 6px; margin: 20px;">Anointed Sounds and Visuals</h2>
     
     <div class="container-3" style="background-color: black; background: rgba(0 0 0 / 0.2); padding: 10px; border-radius: 8px; margin:5px;">
-    <p>We invite you to explore, listen, watch, and most importantly—worship along.</p>
-
-<p>Let every media moment be a spiritual experience.</p>
+    <p>We invite you to explore, listen, watch, and most importantly, worship along.<br>
+Let every media moment be a spiritual experience.</p>
 </div><br>
 
  
+
+<div style="background-color: black; background: rgba(0 0 0 / 0.2); padding: 10px; border-radius: 8px; margin: 5px;">
+    <h3>Audio Tracks</h3>
+<p style="padding-top:0px;">Listen to spirit-filled piano covers, soft hymnals, and spontaneous worship moments crafted to stir the heart.</p> 
+
+<h2 style="background:none; color: #ff9d00; padding-bottom:0px;">Hymns & Worship Songs</h2>
+
+<button class="toggle-btn" onclick="toggleMusic()">🎵 Search Music by Categories</button>
+
 <style>
-  /* Style for media sections */
-  .media-section {
-    display: none;
-    padding: 10px;
-    margin: 10px auto;
-    max-width: 100%;
-    border-radius: 8px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.4);
-     /* optional */
-  }
-
-  /* Style for media content within sections */
-  .media-content {
-    padding: 10px;
-    margin: 5px 0;
-  }
-
-  /* Style for the audio list grid */
-  #audioList {
+  .music-section {
+    max-width: 700px;
     display: grid;
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 10px;
-  }
-
-  /* Container for each iframe to crop content */
-  #audioList div {
-    height: 150px; /* Fixed height for cropping */
-    overflow: hidden;
-    position: relative;
-    border-radius: 8px; /* optional for aesthetics */
-  }
-
-  /* Style for iframes inside the containers */
-  #audioList iframe {
-    width: 100%;
-    height: 250px; /* Larger height than container for cropping */
-    position: relative;
-    top: -170px; /* Adjust to crop the iframe content vertically */
-    border: none;
-  }
-
-  /* Optional: Style buttons for better appearance */
-  .buttons {
+    display: none;
     text-align: center;
-    margin-top: 20px;
   }
 
-  button {
-    margin: 5px;
-    padding: 10px 15px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    border: none;
-   
+  .music-category {
+    background: grey;
+    margin: 5px 0;
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid;
   }
-  
-  /* Make images responsive and add some spacing */
-  img {
-    width: 100%;
-    height: auto;
+
+  .music-category h3 {
+    margin: 5px 0px 0px 2px;
+    font-family: Georgia, serif;
+    color: orange;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .music-category p {
+    font-style: italic;
+    color: white;
+    font-size: 12px;
+    text-align: left;
+    padding: 0px;
+    margin: 0px;
+    line-height: 17px;
+  }
+
+  .music-category button {
+    margin-top: 10px;
+    padding: 7px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+  .toggle-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #2ecc71;
+    color: white;
+    border: none;
     border-radius: 8px;
+    cursor: pointer;
   }
 </style>
 
 
-<!-- Scripts -->
+
+<div class="music-section" id="musicSection">
+
+  <div class="music-category">
+    <h3>Meditative Piano</h3><hr style="margin:0 0 10px;">
+    <p>Explore the Peaceful piano rhythm for prayer, reflection, and quiet time.</p>
+    <button onclick="showMyCategoryPopup('meditative')">Meditative Piano</button>
+  </div>
+
+  <div class="music-category">
+    <h3>Slow Worship</h3><hr style="margin:0 0 10px;">
+    <p>Listen to Gentle worship instrumentals to help you go deeper in intimacy.</p>
+    <button onclick="showMyCategoryPopup('slowWorship')">Slow Worship</button>
+  </div>
+
+  <div class="music-category">
+    <h3>Background Music</h3><hr style="margin:0 0 10px;">
+    <p>Get Soft instrumentals perfect for reading, prayer, or resting in His presence.</p>
+    <button onclick="showMyCategoryPopup('backgroundMusic')">Background Music</button>
+  </div>
+
+  <div class="music-category">
+<h3>Hymn Covers</h3><hr style="margin:0 0 10px;">
+    <p>Discover our top Classic hymns reimagined with fresh instrumental beauty.</p>
+   <button onclick="showMyCategoryPopup('hymnsCovers')">Hymns Covers</button>
+  </div>
+</div>
+
+<style>
+ 
+  /* Popup styles (unchanged but with prefixed IDs) */
+  #my-categoryPopup {
+    display: none;
+    position: fixed;
+    top: 100px;
+    left: 20px;
+    width: 90%;
+    max-width: 700px;
+    height: 200px;
+    background: transparent;
+    z-index: 9999;
+  }
+  #my-popupHeader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    box-sizing: border-box;
+    background: rgba(255,255,255,0.1);
+    cursor: move;
+    border-radius: 10px 10px 0 0;
+    z-index: 1000;
+  }
+  #my-closeCircle {
+    position: absolute;
+    top: -10px;
+    right: -30px;
+    width: 30px;
+    height: 30px;
+    background: #fff;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+  }
+  #my-resizeHandle {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    cursor: se-resize;
+    border-top: 2px solid #999;
+    border-left: 2px solid #999;
+    box-shadow: inset -1px -1px 2px rgba(0,0,0,0.2);
+    border-radius: 0 0 0 10px;
+    background: transparent;
+  }
+  #my-iframeContainer {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+  }
+  #my-iframeContainer iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 10px;
+  }
+</style>
+
+<!-- Popup container -->
+<div id="my-categoryPopup">
+  <!-- Drag handle -->
+  <div id="my-popupHeader">
+    <button id="my-dragHandle" title="Drag" aria-label="Drag" style="background:none; border:none; font-size:20px; cursor:grab;">🔘</button>
+  </div>
+  <!-- Close button -->
+  <button id="my-closeCircle" title="Close" aria-label="Close">❌</button>
+  <!-- Resize corner -->
+  <div id="my-resizeHandle"></div>
+  <!-- iframe container -->
+  <div id="my-iframeContainer">
+    <iframe src="" scrolling="no" title="Category Playlist"></iframe>
+  </div>
+</div>
+
 <script>
-  function toggleSection(id) {
-    const sections = document.querySelectorAll('.media-section');
-    sections.forEach(sec => {
-      if (sec.id === id) {
-        sec.style.display = sec.style.display === 'block' ? 'none' : 'block';
-      } else {
-        sec.style.display = 'none'; // hide others
-      }
-    });
+  const myPopup = document.getElementById('my-categoryPopup');
+  const myIframe = myPopup.querySelector('iframe');
+  const myDragHandle = document.getElementById('my-dragHandle');
+  const myCloseBtn = document.getElementById('my-closeCircle');
+  const myResizeHandle = document.getElementById('my-resizeHandle');
+
+  let isMyDragging = false;
+  let myDragOffsetX = 0;
+  let myDragOffsetY = 0;
+
+  let isMyResizing = false;
+
+  function showMyCategoryPopup(category) {
+    const urlMap = {
+      'meditative': 'https://audiomack.com/embed/davidmpigapiano/playlist/meditative-piano',
+      'slowWorship': 'https://audiomack.com/embed/davidmpigapiano/playlist/slow-worship',
+      'backgroundMusic': 'https://audiomack.com/embed/davidmpigapiano/playlist/background-music',
+      'hymnsCovers': 'https://audiomack.com/embed/davidmpigapiano/playlist/hymns-covers'
+    };
+    myIframe.src = urlMap[category] || '';
+
+    // Reset size and position
+    myPopup.style.display = 'block';
+    myPopup.style.left = '20px';
+    myPopup.style.top = '100px';
+    myPopup.style.width = '90%';
+    myPopup.style.height = '200px';
   }
 
-  function toggleAudioList() {
-    const list = document.getElementById('audioList');
-    list.style.display = list.style.display === 'grid' ? 'none' : 'grid';
+  // Close popup
+  document.getElementById('my-closeCircle').onclick = () => {
+    myPopup.style.display='none';
+  };
+
+  // Drag
+  document.getElementById('my-dragHandle').addEventListener('mousedown', startMyDrag);
+  document.getElementById('my-dragHandle').addEventListener('touchstart', startMyDrag);
+
+  function startMyDrag(e) {
+    e.preventDefault();
+    isMyDragging = true;
+    const rect = myPopup.getBoundingClientRect();
+    if (e.type === 'touchstart') {
+      myDragOffsetX = e.touches[0].clientX - rect.left;
+      myDragOffsetY = e.touches[0].clientY - rect.top;
+    } else {
+      myDragOffsetX = e.clientX - rect.left;
+      myDragOffsetY = e.clientY - rect.top;
+    }
+    document.addEventListener('mousemove', doMyDrag);
+    document.addEventListener('mouseup', stopMyDrag);
+    document.addEventListener('touchmove', doMyDrag);
+    document.addEventListener('touchend', stopMyDrag);
+  }
+
+  function doMyDrag(e) {
+    if (!isMyDragging) return;
+    let clientX, clientY;
+    if (e.touches) {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+    let left = clientX - myDragOffsetX;
+    let top = clientY - myDragOffsetY;
+    left = Math.max(0, Math.min(left, window.innerWidth - myPopup.offsetWidth));
+    top = Math.max(0, Math.min(top, window.innerHeight - myPopup.offsetHeight));
+    myPopup.style.left = left + 'px';
+    myPopup.style.top = top + 'px';
+  }
+
+  function stopMyDrag() {
+    isMyDragging = false;
+    document.removeEventListener('mousemove', doMyDrag);
+    document.removeEventListener('mouseup', stopMyDrag);
+    document.removeEventListener('touchmove', doMyDrag);
+    document.removeEventListener('touchend', stopMyDrag);
+  }
+
+  // Resize
+  myResizeHandle.addEventListener('mousedown', startMyResize);
+  myResizeHandle.addEventListener('touchstart', startMyResize);
+  function startMyResize(e) {
+    e.preventDefault();
+    isMyResizing = true;
+    document.addEventListener('mousemove', doMyResize);
+    document.addEventListener('mouseup', stopMyResize);
+    document.addEventListener('touchmove', doMyResize);
+    document.addEventListener('touchend', stopMyResize);
+  }
+
+  function doMyResize(e) {
+    if (!isMyResizing) return;
+    let clientX, clientY;
+    if (e.touches) {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+    const rect = myPopup.getBoundingClientRect();
+    const newWidth = Math.max(150, clientX - rect.left);
+    const newHeight = Math.max(100, clientY - rect.top);
+    const maxWidth = window.innerWidth - rect.left - 10;
+    const maxHeight = window.innerHeight - rect.top - 10;
+    myPopup.style.width = Math.min(newWidth, maxWidth) + 'px';
+    myPopup.style.height = Math.min(newHeight, maxHeight) + 'px';
+  }
+
+  function stopMyResize() {
+    isMyResizing = false;
+    document.removeEventListener('mousemove', doMyResize);
+    document.removeEventListener('mouseup', stopMyResize);
+    document.removeEventListener('touchmove', doMyResize);
+    document.removeEventListener('touchend', stopMyResize);
+  }
+</script>
+<script>
+  function toggleMusic() {
+    const section = document.getElementById("musicSection");
+    section.style.display = section.style.display === "grid" ? "none" : "grid";
   }
 </script>
 
 
-<div style="background-color: black; background: rgba(0 0 0 / 0.2); padding: 10px; border-radius: 8px; margin: 5px;">
-    <h3>Audio Tracks</h3>
-<p>Listen to spirit-filled piano covers, soft hymnals, and spontaneous worship moments crafted to stir the heart.</p> 
-<div style="text-align: center;"><button onclick="toggleSection('audio')">Audio Tracks</button></div>
-</div>
-<div id="audio" class="media-section">
-  <h3>Audio Tracks</h3>
-  <div class="media-content">
-    <iframe src="https://audiomack.com/embed/davidmpigapiano/song/187-such-love-best-timely-hymns" height="250" style="width:100%; border:none;"></iframe>
-  </div>
-  <button onclick="toggleAudioList()">Play Lists</button>
-  <!-- Hidden Audio List in grid with cropping -->
-  <div id="audioList" style="display: none;">
-    <!-- Each iframe wrapped in a cropping container -->
-    <div>
-      <iframe src="https://audiomack.com/embed/davidmpigapiano/song/ngombe-leng-by-bro-david" scrolling="no" frameborder="0"></iframe>
-    </div>
-    <div>
-      <iframe src="https://audiomack.com/embed/davidmpigapiano/song/kwa-mufano-wako" scrolling="no" frameborder="0"></iframe>
-    </div>
-    <div>
-      <iframe src="https://audiomack.com/embed/davidmpigapiano/song/aaaaaaaaaa-1" scrolling="no" frameborder="0"></iframe>
-    </div>
-    <div>
-      <iframe src="https://audiomack.com/embed/davidmpigapiano/song/so-just-be-faithful" scrolling="no" frameborder="0"></iframe>
-    </div>
-    <div>
-      <iframe src="https://audiomack.com/embed/davidmpigapiano/song/aaaaaaaaaa" scrolling="no" frameborder="0"></iframe>
-    </div>
-    <div>
-      <iframe src="https://audiomack.com/embed/davidmpigapiano/song/best-skill-1" scrolling="no" frameborder="0"></iframe>
-    </div>
-    <div>
-      <iframe src="https://audiomack.com/embed/davidmpigapiano/song/best-skill" scrolling="no" frameborder="0"></iframe>
-    </div>
-  </div>
- </div>
-</div><br>
+<script>
+  function toggleMusic() {
+    const section = document.getElementById("musicSection");
+    section.style.display = section.style.display === "grid" ? "none" : "grid";
+  }
+</script>
 
+</div><br>
+    
     
    <div style="background-color: black; background: rgba(0 0 0 / 0.2); padding: 10px; border-radius: 8px; margin: 5px;">
     <h3>Piano Videos</h3>
-<p>Watch expressive piano worship sessions, featuring live hymns, prayer atmospheres, and spontaneous praise.</p>
-<div style="text-align: center; ">
-<button onclick="toggleSection('video')">Worship Videos</button> </div>
-</div><br>
-<div id="video" class="media-section">
-  <h3>Worship Videos</h3>
-  
-  <iframe width="560" height="315"  src="https://youtu.be/sh1tlvq2BIA?si=AUYcqjRBB4OZixeq" 
-  title="YouTube video player" frameborder="0" 
-  allow="autoplay; encrypted-media" 
-  allowfullscreen>
-</iframe>
-   <div class="media-content">🎥 Evening Devotion Set</div>
+<p>Watch expressive piano worship sessions, featuring live hymns, prayer atmospheres, and spontaneous praise.</p><br>
+<div style="text-align: center;"><a style ="padding:10px; border:solid 1px white;"href="">coming soon</a></div>
 </div>
+</div><br>
 
 
 <div style="background-color: black; background: rgba(0 0 0 / 0.2); padding: 10px; border-radius: 8px; margin: 5px;">
     <h3>Media Gallery</h3>
-<p>Explore a rich collection of photos, videos, and audio clips capturing powerful worship moments and ministry highlights.</p>
-<div style="text-align: center; ">
-<button onclick="toggleSection('images')">Worship Moments</button></div>
+<p>Explore a rich collection of photos, videos, and audio clips capturing powerful worship moments and ministry highlights.</p><br>
+<div style="text-align: center;"><a style ="padding:10px; border:solid 1px white;"href="">coming soon</a></div>
 </div><br>
-<div id="images" class="media-section">
-  <h3>Worship Moments</h3>
-  <img src="https://i.postimg.cc/CMmSxGK6/IMG-20250803-151222.jpg" width="100%" style="margin-bottom:10px;">
-  <img src="https://i.postimg.cc/vH78dHSN/images-13.jpg" width="100%" style="margin-bottom:10px;">
-  <img src="https://i.postimg.cc/zGjfTXCg/images-7.jpg" width="100%">
-</div>
 
+
+<div id="images" class="media-section">
+  
+</div>
 <style>
   .slider-container {
     position: relative;
@@ -870,6 +1431,7 @@ z-index: 9998;"></div>
     overflow: hidden;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    border: 2px solid orange;
   }
     .slides {
     display: flex;
@@ -905,7 +1467,10 @@ z-index: 9998;"></div>
   }
 </style>
 
+
 <h3 style="margin:20px;">Only Believe Gospel Hymns App</h3>
+<p style="margin:0px; padding:0px 30px 20px; line-height:15px; font-size:12px;">Tap inside the box to stop auto slide and you can zoom. <br>Tap outside the box to resume auto slide.<br> Tap the arrows to move right or left.</p>
+
 <div class="slider-container" style="margin-left:40px; background: rgba(0,0,0,0.5);">
   <div class="slides" id="slides">
     <div class="slide"><img src="https://i.postimg.cc/J02cXXZK/Screenshot-20250813-070658.jpg" alt="Logo" /></div>
@@ -939,7 +1504,7 @@ z-index: 9998;"></div>
 </div>
 
 
-<div style="text-align: center; margin:20px; margin-top:30px;"><a style="padding:15px;" href="https://www.appcreator24.com/app3591214-ln749p">Download the App Now</a></div>
+<div style="text-align: center; margin:20px; margin-top:30px;"><a style="padding:10px;" href="https://www.appcreator24.com/app3591214-ln749p">Install the App Now</a></div>
 
 
 <script>
@@ -1021,7 +1586,7 @@ z-index: 9998;"></div>
 
 <section id="contact" class="content">
    <h2 style="font-weight: bold; font-family: Georgia, serif; padding: 6px; margin:15px;">We'd Love to Hear from You</h2>
-    <p>Reach out for bookings, lessons, or collaborations</p>
+    <p>Reach out for bookings, lessons, collaborations, song request.</p>
  
  
   <!-- Contact Form -->
@@ -1098,10 +1663,10 @@ z-index: 9998;"></div>
 
 <div style="text-align: left; margin-top: 30px;">
   <h3 style="color: white; margin-bottom: 5px;">Phone:</h3>
-  <div style="margin-left: 30px; font-size: 15px;">
-   +256 775 810 754<br>
-   +256 745 685 868
-  </div>
+ <div style="margin-left: 12px; font-size: 15px; line-height:20px;">
+  <a href="tel:+256775810754" style="background: none; color: inherit; text-decoration: none;">+256 775 810 754</a><br>
+  <a href="tel:+256745685868" style="background: none; color: inherit; text-decoration: none;">+256 745 685 868</a>
+</div>
 </div>
 </div>
 
@@ -1171,7 +1736,14 @@ z-index: 9998;"></div>
   <a href="https://maps.google.com" target="_blank" style="color: skyblue;">View on Google Maps</a>
 </p></div>
 
-  <p style="font-size: 14px; color: #aaa; text-align: center; margin-top:30px;">&copy; 2025 David Mpiga Piano. All rights reserved.</p>
+
+
+<p style="font-size: 14px; color: #aaa; text-align: center; margin-top:30px;">&copy; 2025 David Mpiga Piano. Music Makes Me Happy</p>
+
+
+
+
+  
 </footer>
 
 </body>  

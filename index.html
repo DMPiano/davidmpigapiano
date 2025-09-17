@@ -99,6 +99,7 @@
       justify-content: center;
       padding-top: 30px;
       gap: 10px;
+      font-weight: bold;
     }
     
     .nav-bar a {
@@ -115,6 +116,7 @@
  .nav-bar a.active {
       background-color: white;
       color: blue;
+      font-weight: bold;
     }
     
  section h2 {
@@ -252,7 +254,7 @@
   
  <!-- Settings Button -->
 <div class="settings-container" style="text-align: center;">
-  <button onclick="toggleSettings_s()" style="margin: 10px; padding: 5px 15px; border-radius: 8px;">
+  <button onclick="toggleSettings_s()" style="margin: 10px; padding: 5px 15px; border-radius: 8px; font-weight: bold;">
     ⚙️ Settings
   </button>
 
@@ -1680,6 +1682,64 @@ Let every media moment be a spiritual experience.</p>
   setInterval(showPopup, 600000);
 </script>
 
+
+<script type="module">
+  // Import Firebase functions
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+  import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
+
+  // Your Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDAhSv4OJaF4GAeRgSndj46ES8S7hc7tA4",
+    authDomain: "david-mpiga-piano.firebaseapp.com",
+    projectId: "david-mpiga-piano",
+    storageBucket: "david-mpiga-piano.firebasestorage.app",
+    messagingSenderId: "525551282015",
+    appId: "1:525551282015:web:fd689244841031467e78ea",
+    measurementId: "G-5T40MTP80X"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+
+  // Function to track total visits
+  async function trackVisit() {
+    const totalRef = ref(database, 'websiteVisits/total');
+    await runTransaction(totalRef, (current) => {
+      return (current || 0) + 1;
+    });
+  }
+
+  // Function to track source (referrer)
+  async function trackSource() {
+    const sourcesRef = ref(database, 'websiteVisits/sources');
+
+    const referrer = document.referrer || 'direct';
+
+    // Identify source based on referrer
+    let source = 'Unknown';
+
+    if (referrer.includes('facebook.com')) source = 'Facebook';
+    else if (referrer.includes('twitter.com')) source = 'Twitter';
+    else if (referrer.includes('instagram.com')) source = 'Instagram';
+    else if (referrer.includes('whatsapp.com')) source = 'WhatsApp';
+    else source = 'Direct';
+
+    // Increment source count
+    await runTransaction(sourcesRef, (sources) => {
+      if (!sources) sources = {};
+      sources[source] = (sources[source] || 0) + 1;
+      return sources;
+    });
+  }
+
+  // Execute tracking on page load
+  window.addEventListener('load', () => {
+    trackVisit();
+    trackSource();
+  });
+</script>
 
 
 </body>  
